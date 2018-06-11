@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using odata_mapping_test.Persistence;
 
 namespace odata_mapping_test
 {
@@ -14,7 +16,14 @@ namespace odata_mapping_test
     {
         public static void Main(string[] args)
         {
-            BuildWebHost(args).Run();
+            var host = BuildWebHost(args);
+            using (var scope = host.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                var context = services.GetRequiredService<SalesContext>();
+                SalesInitializer.Seed(context);
+            }
+            host.Run();
         }
 
         public static IWebHost BuildWebHost(string[] args) =>

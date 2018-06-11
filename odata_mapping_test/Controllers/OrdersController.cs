@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.OData;
+using odata_mapping_test.Controllers.entities;
 using odata_mapping_test.Core.Models;
 using odata_mapping_test.Persistence;
 
@@ -18,9 +20,11 @@ namespace odata_mapping_test.Controllers
         }
 
         [EnableQuery]
-        public IQueryable<Order> Get()
+        public IQueryable<OrderEntity> Get()
         {
-            return context.Orders.AsQueryable();
+            return context.Orders
+                .ProjectTo<OrderEntity>()
+                .AsQueryable();
         }
-    }
+    }   
 }

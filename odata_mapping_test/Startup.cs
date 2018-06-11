@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using odata_mapping_test.Mapping;
 using odata_mapping_test.Persistence;
 
 namespace odata_mapping_test
@@ -26,8 +27,10 @@ namespace odata_mapping_test
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<SalesContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
+            services.AddDbContext<SalesContext>(options => options.UseInMemoryDatabase("Default"));
             services.AddTransient<SalesModelBuilder>();
+
+            MappingProfile.RegisterMappings();
 
             services.AddOData();
             services.AddMvc();

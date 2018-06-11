@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.OData.Builder;
 using Microsoft.OData.Edm;
+using odata_mapping_test.Controllers.entities;
 using odata_mapping_test.Core.Models;
 
 namespace odata_mapping_test.Persistence
@@ -14,13 +15,15 @@ namespace odata_mapping_test.Persistence
         {
             var builder = new ODataConventionModelBuilder(serviceProvider);
 
-            builder.EntitySet<Customer>("Customers")
+            builder.EntitySet<ProductEntity>("Products")
                 .EntityType
-                .Expand();
-            builder.EntitySet<Order>("Orders")
+                .Expand()
+                .Page();
+
+            builder.EntitySet<ProductEntity>("Orders")
                 .EntityType
-                .Expand();
-            builder.EntitySet<Product>("Products");
+                .Expand()
+                .Page();
 
             return builder.GetEdmModel();
         }
